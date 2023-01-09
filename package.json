@@ -1,0 +1,9 @@
+{
+  "name": "formEditor",
+  "version": "1.0.0",
+  "description": "form configuration rendering",
+  "main": "index.js",
+  "repository": "https://github.com/thezj/formEditor.git",
+  "author": "thezj",
+  "license": "MIT"
+}
