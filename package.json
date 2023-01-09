@@ -1,9 +1,19 @@
 {
-  "name": "formEditor",
-  "version": "1.0.0",
-  "description": "form configuration rendering",
-  "main": "index.js",
-  "repository": "https://github.com/thezj/formEditor.git",
-  "author": "thezj",
-  "license": "MIT"
+  "name": "formeditor",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "less": "^4.1.3",
+    "vue": "^3.2.45"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "vite": "^4.0.0"
+  }
 }
