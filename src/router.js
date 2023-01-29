@@ -4,7 +4,7 @@ import editor from "@/editor.vue";
 
 const routes = [
     {
-        path: "/sss",
+        path: "/",
         name: "render",
         component: render,
     },

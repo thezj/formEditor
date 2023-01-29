@@ -46,15 +46,14 @@ let onSubmit = async res => {
   }
   emit('submit', inputInfo)
 }
-
-
 </script>
 
 <template>
   <div class="formRender">
     <van-form @submit="onSubmit">
       <div class="vanfield" v-for="item in formConfigs.formFields" :key="item.type + item.props.name"
-        :id="item.type + item.props.name" @touchstart="item.props.errorMessage = ''">
+        :id="item.type + item.props.name" @touchstart="item.props.errorMessage = ''"
+        @click="item.props.errorMessage = ''">
 
         <!-- 填写表单项的提示信息 -->
         <div v-if="item.describe" class="describe">
