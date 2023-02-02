@@ -128,9 +128,6 @@ onMounted(() => {
         </div>
       </div>
     </template>
-    <div style="color:salmon">
-      {{ icomponentList.map(x => x.layout['gs-id']) }}
-    </div>
   </div>
 
   <div class="formRender">
