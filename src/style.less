@@ -79,7 +79,9 @@ summary,
 time,
 mark,
 audio,
-video {}
+video {
+  margin: 0;
+}
 
 /* HTML5 display-role reset for older browsers */
 article,
@@ -123,7 +125,54 @@ table {
   border-spacing: 0;
 }
 
+.componentLibrary {
+  width: 180px;
+  background: rgb(41, 41, 41);
+  padding: 10px;
+
+  .grid-stack-item-content {
+    p{
+      padding-left: 10px;
+      font-size: 14px;
+      line-height: 32px;
+      height: 32px;
+      color: gainsboro;
+      cursor: pointer;
+      &:hover{
+        background: black;
+      }
+    }
+  }
+}
+
+#app {
+  display: flex;
+}
+
+
+
 .formRender {
+  background: aliceblue;
+  flex-grow: 1;
+
+  .grid-stack-item-content {
+    box-sizing: border-box;
+    background: rgb(255, 255, 255);
+  }
+  .grid-stack-item.ui-resizable-autohide {
+    .ui-setting-Btn {
+      display: none;
+    }
+  }
+
+  .ui-setting-Btn {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    cursor: pointer;
+  }
+
+
   .vanfield {
     margin-top: 10px;
   }
@@ -214,4 +263,6 @@ table {
   .attribute {
     flex-grow: 1;
   }
+
+
 }

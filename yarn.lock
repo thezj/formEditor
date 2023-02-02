@@ -472,6 +472,11 @@ graceful-fs@^4.1.2:
   resolved "https://registry.npmmirror.com/graceful-fs/-/graceful-fs-4.2.10.tgz#147d3a006da4ca3ce14728c7aefc287c367d7a6c"
   integrity sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==
 
+gridstack@^7.2.2:
+  version "7.2.2"
+  resolved "https://registry.npmmirror.com/gridstack/-/gridstack-7.2.2.tgz#1a5be730923722c88685641809f36c9681d329bd"
+  integrity sha512-9swEjbisKhtZlbmNiTCxOarp/9NWit5mLg6Z73sUhd4LKur5ZptMH16CUJu7HjMHxgI86FbQI5ZfMM/2TuMqdw==
+
 has@^1.0.3:
   version "1.0.3"
   resolved "https://registry.npmmirror.com/has/-/has-1.0.3.tgz#722d7cbfc1f6aa8241f16dd814e011e1f41e8796"

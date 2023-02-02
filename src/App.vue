@@ -1,89 +1,150 @@
 <script setup>
-import { ref } from "vue"
-// 序列化的表单数据
-import formJson from "./formJson.js"
+import { ref, onMounted } from "vue"
 
-//定义事件
-const emit = defineEmits(['submit'])
+// 布局插件
+import 'gridstack/dist/gridstack.min.css';
+import { GridStack } from 'gridstack';
 
-// 绑定相应对象
-let formConfigs = ref(formJson)
 
-// 点击提交事件
-let onSubmit = async res => {
+// 序列化的组件库
+import componentLibrary from "./componentLibrary"
+// 序列化的组件数据
+import componentList from "./componentList"
+
+// 添加ref
+let icomponentList = ref(componentList)
+let icomponentLibrary = ref(componentLibrary)
+
+/**
+ * 添加全局变量 
+ */
+// 画布对象
+let grid
+
+/**
+ * 初始化画布
+ */
+let initCanvas = () => {
+
+  // 记录当前拖拽组件
+  let currentDraggedComponent
+
+
+  // 初始化grid
+  let gridOptions = {
+    // 画布自动变高
+    float: true,
+    // Accept widgets dragged from other grids or from outside 
+    acceptWidgets: true,
+    // 单元高度
+    cellHeight: 80,
+    // 单元格间隔大小
+    margin: 10,
+    //栅格大小
+    column: 12,
+    // 禁止整体宽度小于minW时column变成1
+    disableOneColumnMode: true
+  }
+
+  // 设置可拖拽到布局的div
+
+  grid = GridStack.init(gridOptions, ".formRender");
+
   /**
-   * 验证信息，验证到一条不通过就可以返回了
-   * 可使用异步接口进行验证
+   * 画布事件绑定
    */
-  for (let index = 0; index < formConfigs.value.formFields.length; index++) {
-    let field = formConfigs.value.formFields[index];
-    if (field.validator.length) {
-      for (let index = 0; index < field.validator.length; index++) {
-        let rule = field.validator[index];
-        // 开始验证一条规则
-        console.log("验证规则====", field.props.name, field.value, rule)
-        let result = eval(`(()=>{${rule.code}})()`)
-        console.log("验证结果====", result)
-        if (!result) {
-          //验证失败，提示信息，滚动到此项
-          field.props.errorMessage = rule.hint
-          document.querySelector(`#${field.type + field.props.name}`).scrollIntoView(false);
-          // 不必继续验证，直接返回
-          return
-        }
+
+  // 新添加元素信息
+  grid.on('added', function (e) {
+    let layoutInfo = e.detail[0]
+    // 排除已经具备id的元素
+    let isExist = layoutInfo.id
+    if (!isExist) {
+
+      grid.removeWidget(layoutInfo.el);
+      // 添加组件到现有组件列表
+      let currentCom = icomponentLibrary.value.getComponentByType(currentDraggedComponent)
+      console.log("新添加的元素信息====", layoutInfo, currentCom)
+      // 添加布局信息
+      currentCom.layout['gs-id'] = `com${(Math.random() * 10000000000000).toFixed()}`
+      currentCom.layout['gs-x'] = layoutInfo.x
+      currentCom.layout['gs-y'] = layoutInfo.y
+      icomponentList.value.push(currentCom)
+      setTimeout(() => {
+        let addedDom = document.querySelector(`[gs-id=${currentCom.layout['gs-id']}]`)
+        grid.makeWidget(addedDom);
+      }, 10);
+    }
+  });
+
+  // 删除元素信息
+  grid.on('removed', function (e) {
+    console.log("删除元素====", e);
+    let layoutInfo = e.detail[0]
+    icomponentList.value = icomponentList.value.filter(x => x.layout['gs-id'] != layoutInfo.id)
+    setTimeout(() => {
+      console.log(icomponentList)
+    }, 10);
+  });
+
+  GridStack.setupDragIn(
+    '.componentLibrary .grid-stack-item',
+    {
+      handle: '.grid-stack-item-content',
+      appendTo: 'body',
+      // 拖动时显示的dom
+      helper: function (event) {
+        return event.target.cloneNode(true);
+      },
+      // 开始拖拽的元素
+      start: function (event) {
+        console.log("开始拖拽组件====", event);
+        currentDraggedComponent = event.target.dataset.comtype
       }
     }
-  }
-
-
-
-  let formConfigsRaw = JSON.parse(JSON.stringify(formConfigs.value.formFields))
-  let inputInfo = formConfigsRaw.map(field => { return { name: field.props.name, value: field.originalValue ? field.originalValue : field.value } })
-
-  // 最后处理提交信息的脚本
-  if (formConfigs.value.beforSubmitCode) {
-    eval(formConfigs.value.beforSubmitCode)
-  }
-  emit('submit', inputInfo)
+  );
 }
+
+/**
+ * 移除组件
+ */
+let removeComponent = gsid => {
+  let removeDom = document.querySelector(`[gs-id=${gsid}]`)
+  grid.removeWidget(removeDom);
+}
+
+onMounted(() => {
+  initCanvas()
+})
+
 </script>
 
 <template>
-  <div class="formRender">
-    <van-form @submit="onSubmit">
-      <div class="vanfield" v-for="item in formConfigs.formFields" :key="item.type + item.props.name"
-        :id="item.type + item.props.name" @touchstart="item.props.errorMessage = ''"
-        @click="item.props.errorMessage = ''">
-
-        <!-- 填写表单项的提示信息 -->
-        <div v-if="item.describe" class="describe">
-          <van-icon name="info-o" />
-          <span>{{ item.describe }}</span>
+  <div class="componentLibrary">
+    <template v-for="component in icomponentLibrary.list" :key="component.id">
+      <div class="grid-stack-item" v-bind="component.layout" :data-ComType="component.schema.type">
+        <div class="grid-stack-item-content">
+          <p>{{ component.schema.describe }}</p>
         </div>
-
-        <!-- 渲染表单项 -->
-        <template v-if="item.type == 'input'">
-          <van-field v-model="item.value" v-bind="item.props" />
-        </template>
-
-        <!-- 渲染表单项 -->
-        <template v-if="item.type == 'picker'">
-          <van-field v-model="item.value" v-bind="item.props" is-link readonly @click="item.showPicker = true" />
-          <van-popup v-model:show="item.showPicker" position="bottom">
-            <van-picker :columns="item.columns"
-              @confirm="({ selectedOptions }) => { item.value = selectedOptions[0]?.text; item.originalValue = selectedOptions; item.showPicker = false }"
-              @cancel="item.showPicker = false" />
-          </van-popup>
-        </template>
-
       </div>
+    </template>
+    <div style="color:salmon">
+      {{ icomponentList.map(x => x.layout['gs-id']) }}
+    </div>
+  </div>
 
-      <!-- 底部按钮 -->
-      <div class="formBottom">
-        <van-button round block type="primary" native-type="submit">
-          提交
-        </van-button>
+  <div class="formRender">
+    <!-- 根据组件列表渲染出格子 -->
+    <template v-for="component in icomponentList" :key="component.layout['gs-id']">
+      <div class="grid-stack-item" v-bind="component.layout">
+        <div class="grid-stack-item-content">
+          <div class="ui-setting-Btn"><ion-icon name="settings-outline"></ion-icon></div>
+          <div @click="removeComponent(component.layout['gs-id'])" class="ui-setting-Btn" style="right:24px">
+            <ion-icon name="trash-outline"></ion-icon>
+          </div>
+          <component :is="component.schema.type" :props="component.schema.props"></component>
+        </div>
       </div>
-    </van-form>
+    </template>
   </div>
 </template>
