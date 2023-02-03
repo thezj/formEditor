@@ -4,6 +4,7 @@ import { ref, onMounted } from "vue"
 // 布局插件
 import 'gridstack/dist/gridstack.min.css';
 import { GridStack } from 'gridstack';
+import utils from './utils';
 
 
 // 序列化的组件库
@@ -94,7 +95,7 @@ let initCanvas = () => {
       appendTo: 'body',
       // 拖动时显示的dom
       helper: function (event) {
-        return event.target.cloneNode(true);
+        return utils.getParentNode(event.target, 'grid-stack-item-content').parentElement.cloneNode(true);
       },
       // 开始拖拽的元素
       start: function (event) {
@@ -123,7 +124,8 @@ onMounted(() => {
   <div class="componentLibrary">
     <template v-for="component in icomponentLibrary.list" :key="component.id">
       <div class="grid-stack-item" v-bind="component.layout" :data-ComType="component.schema.type">
-        <div class="grid-stack-item-content">
+        <div class="grid-stack-item-content library">
+          <ion-icon name="settings-outline"></ion-icon>
           <p>{{ component.schema.describe }}</p>
         </div>
       </div>
@@ -135,8 +137,8 @@ onMounted(() => {
       <template v-for="component in icomponentList" :key="component.layout['gs-id']">
         <div class="grid-stack-item" v-bind="component.layout">
           <div class="grid-stack-item-content">
-            <div class="ui-setting-Btn"  style="right:24px"><ion-icon name="settings-outline"></ion-icon></div>
-            <div @click="removeComponent(component.layout['gs-id'])" class="ui-setting-Btn" style="right:44px">
+            <div class="ui-setting-Btn" style="right:-1px"><ion-icon name="settings-outline"></ion-icon></div>
+            <div @click="removeComponent(component.layout['gs-id'])" class="ui-setting-Btn" style="right:15px">
               <ion-icon name="trash-outline"></ion-icon>
             </div>
             <component :is="component.schema.type" :props="component.schema.props"></component>
