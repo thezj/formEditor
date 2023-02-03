@@ -125,6 +125,17 @@ table {
   border-spacing: 0;
 }
 
+
+#app {
+  display: flex;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+
+
 .componentLibrary {
   width: 180px;
   background: rgb(41, 41, 41);
@@ -149,16 +160,6 @@ table {
   }
 }
 
-#app {
-  display: flex;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  left: 0;
-  top: 0;
-}
-
-
 .formRenderContainer {
 
   flex-grow: 1;
@@ -170,9 +171,23 @@ table {
 
   .formRender {
 
+    min-height: 200px;
+
     .grid-stack-item-content {
       box-sizing: border-box;
       background: rgb(255, 255, 255);
+      overflow-y: visible!important;
+      overflow-x: visible!important;
+
+ 
+    }
+
+    .grid-stack-item {
+     
+      .ui-resizable-se{
+        bottom: -12px!important;
+      }
+      
     }
 
     .grid-stack-item.ui-resizable-autohide {
@@ -184,7 +199,7 @@ table {
     .ui-setting-Btn {
       position: absolute;
       right: 4px;
-      top: 4px;
+      bottom: -22px;
       cursor: pointer;
     }
 
@@ -209,78 +224,5 @@ table {
       margin-top: 30px;
     }
   }
-
-}
-
-.formEditor {
-  display: flex;
-
-  .component {
-    background-color: aliceblue;
-    width: 115px;
-    -webkit-user-select: none;
-    -moz-user-select: -moz-none;
-    -ms-user-select: none;
-
-    .com {
-      float: left;
-      margin: 10px 0 0 17px;
-      flex-shrink: 0;
-      border: 1px solid rgb(79, 80, 84);
-      background: white;
-      height: 70px;
-      width: 70px;
-      border-radius: 10px;
-      margin-top: 15px;
-
-      &:hover {
-        box-shadow: 0px 0px 10px rgb(29, 194, 240);
-        border: 1px solid rgb(81, 82, 92);
-        cursor: grab;
-      }
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-
-      ion-icon {
-        font-size: 22px;
-        color: rgb(142, 142, 151);
-      }
-
-      span {
-        margin-top: 5px;
-        font-size: 14px;
-        color: rgb(65, 65, 69);
-      }
-    }
-  }
-
-  .formShow {
-    width: 639px;
-    position: relative;
-
-    .form {
-      position: absolute;
-      left: 197px;
-      top: 90px;
-      width: 237px;
-      height: 509px;
-      border-radius: 20px;
-      overflow-y: auto;
-    }
-
-    .bg {
-      position: absolute;
-      left: 0;
-      top: 0;
-    }
-  }
-
-  .attribute {
-    flex-grow: 1;
-  }
-
 
 }

@@ -135,8 +135,8 @@ onMounted(() => {
       <template v-for="component in icomponentList" :key="component.layout['gs-id']">
         <div class="grid-stack-item" v-bind="component.layout">
           <div class="grid-stack-item-content">
-            <div class="ui-setting-Btn"><ion-icon name="settings-outline"></ion-icon></div>
-            <div @click="removeComponent(component.layout['gs-id'])" class="ui-setting-Btn" style="right:24px">
+            <div class="ui-setting-Btn"  style="right:24px"><ion-icon name="settings-outline"></ion-icon></div>
+            <div @click="removeComponent(component.layout['gs-id'])" class="ui-setting-Btn" style="right:44px">
               <ion-icon name="trash-outline"></ion-icon>
             </div>
             <component :is="component.schema.type" :props="component.schema.props"></component>
