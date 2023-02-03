@@ -129,19 +129,20 @@ onMounted(() => {
       </div>
     </template>
   </div>
-
-  <div class="formRender">
-    <!-- 根据组件列表渲染出格子 -->
-    <template v-for="component in icomponentList" :key="component.layout['gs-id']">
-      <div class="grid-stack-item" v-bind="component.layout">
-        <div class="grid-stack-item-content">
-          <div class="ui-setting-Btn"><ion-icon name="settings-outline"></ion-icon></div>
-          <div @click="removeComponent(component.layout['gs-id'])" class="ui-setting-Btn" style="right:24px">
-            <ion-icon name="trash-outline"></ion-icon>
+  <div class="formRenderContainer">
+    <div class="formRender">
+      <!-- 根据组件列表渲染出格子 -->
+      <template v-for="component in icomponentList" :key="component.layout['gs-id']">
+        <div class="grid-stack-item" v-bind="component.layout">
+          <div class="grid-stack-item-content">
+            <div class="ui-setting-Btn"><ion-icon name="settings-outline"></ion-icon></div>
+            <div @click="removeComponent(component.layout['gs-id'])" class="ui-setting-Btn" style="right:24px">
+              <ion-icon name="trash-outline"></ion-icon>
+            </div>
+            <component :is="component.schema.type" :props="component.schema.props"></component>
           </div>
-          <component :is="component.schema.type" :props="component.schema.props"></component>
         </div>
-      </div>
-    </template>
+      </template>
+    </div>
   </div>
 </template>

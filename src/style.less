@@ -129,16 +129,20 @@ table {
   width: 180px;
   background: rgb(41, 41, 41);
   padding: 10px;
+  box-sizing: border-box;
+  height: 100%;
+  position: relative;
 
   .grid-stack-item-content {
-    p{
+    p {
       padding-left: 10px;
       font-size: 14px;
       line-height: 32px;
       height: 32px;
       color: gainsboro;
       cursor: pointer;
-      &:hover{
+
+      &:hover {
         background: black;
       }
     }
@@ -147,51 +151,65 @@ table {
 
 #app {
   display: flex;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
 }
 
 
+.formRenderContainer {
 
-.formRender {
-  background: aliceblue;
   flex-grow: 1;
+  overflow-y: auto;
+  padding-bottom: 100px;
+  background: aliceblue;
 
-  .grid-stack-item-content {
-    box-sizing: border-box;
-    background: rgb(255, 255, 255);
-  }
-  .grid-stack-item.ui-resizable-autohide {
+
+
+  .formRender {
+
+    .grid-stack-item-content {
+      box-sizing: border-box;
+      background: rgb(255, 255, 255);
+    }
+
+    .grid-stack-item.ui-resizable-autohide {
+      .ui-setting-Btn {
+        display: none;
+      }
+    }
+
     .ui-setting-Btn {
-      display: none;
+      position: absolute;
+      right: 4px;
+      top: 4px;
+      cursor: pointer;
+    }
+
+
+    .vanfield {
+      margin-top: 10px;
+    }
+
+    .describe {
+      color: gray;
+      font-size: 14px;
+      padding: 10px 0 0 15px;
+      display: flex;
+      align-items: center;
+
+      span {
+        padding-left: 5px;
+      }
+    }
+
+    .formBottom {
+      margin-top: 30px;
     }
   }
 
-  .ui-setting-Btn {
-    position: absolute;
-    right: 4px;
-    top: 4px;
-    cursor: pointer;
-  }
-
-
-  .vanfield {
-    margin-top: 10px;
-  }
-
-  .describe {
-    color: gray;
-    font-size: 14px;
-    padding: 10px 0 0 15px;
-    display: flex;
-    align-items: center;
-
-    span {
-      padding-left: 5px;
-    }
-  }
-
-  .formBottom {
-    margin-top: 30px;
-  }
 }
 
 .formEditor {
