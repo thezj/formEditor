@@ -1,8 +1,15 @@
 <script setup>
-import { ref, onMounted } from "vue"
-const params = defineProps(['props'])
+import { ref, onMounted, onUpdated } from "vue"
+const params = defineProps(['modelValue', "iprops"])
+const $emit = defineEmits(['update:modelValue'])
 
-const value = ref(params.props.value)
+// 通过传入的model值初始化本地的model
+let initValue = ref(null)
+onUpdated(() => {
+    if (initValue.value === null && params.modelValue !== undefined) {
+        initValue.value = params.modelValue
+    }
+})
 
 onMounted(() => {
 })
@@ -13,20 +20,23 @@ let onSearch = e => {
 }
 
 let onClickButton = () => {
-    console.log(value.value)
+    console.log(initValue.value)
 }
 
-let onClear = ()=>{
+let onClear = () => {
     console.log("清空搜索框")
+}
+
+let updateValue = inputValue => {
+    $emit('update:modelValue', inputValue)
 }
 </script>
 
 <template>
-    <van-search v-model="value" show-action :label="params.props.label" :placeholder="params.props.placeholder"
-        @search="onSearch"
-        @clear="onClear">
+    <van-search v-model="initValue" show-action :label="params.iprops.label" :placeholder="params.iprops.placeholder"
+        @search="onSearch" @clear="onClear" @update:model-value="updateValue">
         <template #action>
-            <div @click="onClickButton">{{ params.props.actionButtonTxt }}</div>
+            <div @click="onClickButton">{{ params.iprops.actionButtonTxt }}</div>
         </template>
     </van-search>
 </template>

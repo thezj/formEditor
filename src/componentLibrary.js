@@ -28,6 +28,7 @@ export default {
             schema: {
                 type: 'ivanCheckbox',
                 describe: "Checkbox 复选框",
+                icon: 'checkmark-circle-outline',
                 props: {
                     lable: "复选框",
                     checked: true
@@ -43,11 +44,11 @@ export default {
             schema: {
                 type: 'ivanSearch',
                 describe: "Search 搜索",
+                icon: 'search-circle-outline',
                 props: {
                     lable: "复选框",
                     placeholder: "请输入关键词",
                     actionButtonTxt: "查找",
-                    checked: true
                 }
             }
         },

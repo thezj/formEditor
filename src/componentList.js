@@ -24,8 +24,8 @@ export default [
         schema: {
             type: 'ivanCheckbox',
             props: {
+                iModel:'test1',
                 lable: "sdfsd",
-                checked: true
             }
         }
     }

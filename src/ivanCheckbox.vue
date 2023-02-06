@@ -1,14 +1,23 @@
 <script setup>
-import { ref, onMounted } from "vue"
-const params = defineProps(['props'])
+import { ref, onMounted, onUpdated } from "vue"
+const params = defineProps(['modelValue', "iprops"])
+const $emit = defineEmits(['update:modelValue'])
+
+let initValue = ref(null)
+
 onMounted(() => {
 })
-let onchange = e => {
-      console.log(e)
+onUpdated(() => {
+      if (initValue.value === null && params.modelValue !== undefined) {
+            initValue.value = params.modelValue
+      }
+})
+let onchange = checkState => {
+      $emit('update:modelValue', checkState)
 }
-const checked = ref(params.props.checked)
+
 </script>
 
 <template>
-      <van-checkbox v-model="checked" @change="onchange">{{ params.props.lable }}</van-checkbox>
+      <van-checkbox v-model="initValue" @change="onchange">{{ iprops.lable }}</van-checkbox>
 </template>

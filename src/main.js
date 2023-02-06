@@ -20,11 +20,17 @@ ccApp.use(router)
 
 //这个库会在桌面端自动将 mouse 事件转换成对应的 touch 事件，使得组件能够在桌面端使用
 import '@vant/touch-emulator';
+
+// 组件库引用
 import ivanCheckbox from './ivanCheckbox.vue'
 ccApp.component('ivanCheckbox', ivanCheckbox)
 import ivanSearch from './ivanSearch.vue'
 ccApp.component('ivanSearch', ivanSearch)
 
+// ant design for vue
+import Antd from "ant-design-vue";
+import "ant-design-vue/dist/antd.css";
+ccApp.use(Antd)
 
 //启动app
 ccApp.mount('#app')

@@ -8,5 +8,8 @@ export default {
         } else {
             return this.getParentNode(currentNode.parentElement, parentName)
         }
+    },
+    JSONCopy(obj){
+        return JSON.parse(JSON.stringify(obj))
     }
 };
