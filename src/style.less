@@ -156,7 +156,7 @@ table {
     overflow-y: auto;
     padding-bottom: 30px;
 
-    .title{
+    .title {
       color: white;
       background: #3b3c3d;
       font-size: 14px;
@@ -164,7 +164,7 @@ table {
       margin-bottom: 10px;
     }
 
-    .button{
+    .button {
       margin-left: 10px;
       margin-top: 10px;
     }
@@ -190,7 +190,8 @@ table {
         top: 2px;
         font-size: 16px;
         cursor: pointer;
-        &:hover{
+
+        &:hover {
           color: red;
         }
       }
@@ -213,7 +214,7 @@ table {
   flex-grow: 1;
   overflow-y: auto;
   padding-bottom: 100px;
-  background: aliceblue;
+  background: #434647;
   position: relative;
 
   .formRender {
@@ -279,12 +280,14 @@ table {
     overflow-y: visible !important;
     overflow-x: visible !important;
     border: 1px solid #1989fa;
-
+    background: aliceblue;
+    
     cursor: all-scroll;
 
 
     .ui-setting-Btn {
       position: absolute;
+      z-index: 1;
       top: -21px;
       cursor: pointer;
       background: #1989fa;
@@ -306,6 +309,7 @@ table {
     align-items: center;
     padding-left: 10px;
     cursor: pointer;
+    margin-bottom: 10px;
 
     ion-icon {
       height: 20px;
@@ -322,6 +326,7 @@ table {
       line-height: 32px;
       height: 32px;
       color: gainsboro;
+      margin: 0;
     }
 
   }

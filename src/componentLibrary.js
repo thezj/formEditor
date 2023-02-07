@@ -5,7 +5,6 @@ export default {
     },
     list: [
         {
-            id: 'com1',
             /**
              * gs-autoPosition - 忽略x,y属性
              * gs-x, y：坐标
@@ -22,7 +21,7 @@ export default {
              * gs-Forces DDDragOpt.pause=true to accomplish that.
              */
             layout: {
-                ['gs-h']: 1,
+                ['gs-h']: 8,
                 ['gs-w']: 2
             },
             schema: {
@@ -30,15 +29,14 @@ export default {
                 describe: "Checkbox 复选框",
                 icon: 'checkmark-circle-outline',
                 props: {
-                    lable: "复选框",
-                    checked: true
+                    iModel: '',
+                    label: "复选框"
                 }
             }
         },
         {
-            id: 'com2',
             layout: {
-                ['gs-h']: 1,
+                ['gs-h']: 16,
                 ['gs-w']: 4
             },
             schema: {
@@ -46,9 +44,12 @@ export default {
                 describe: "Search 搜索",
                 icon: 'search-circle-outline',
                 props: {
-                    lable: "复选框",
+                    label: "搜索",
                     placeholder: "请输入关键词",
                     actionButtonTxt: "查找",
+                },
+                handlers: {
+                    search: ""
                 }
             }
         },

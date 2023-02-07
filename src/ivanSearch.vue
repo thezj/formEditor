@@ -1,18 +1,17 @@
 <script setup>
 import { ref, onMounted, onUpdated } from "vue"
 const params = defineProps(['modelValue', "iprops"])
-const $emit = defineEmits(['update:modelValue'])
+const $emit = defineEmits(['update:modelValue', 'emited'])
 
-// 通过传入的model值初始化本地的model
 let initValue = ref(null)
 onUpdated(() => {
-    if (initValue.value === null && params.modelValue !== undefined) {
+    if (params.modelValue !== undefined) {
         initValue.value = params.modelValue
     }
 })
-
-onMounted(() => {
-})
+let updateValue = inputValue => {
+    $emit('update:modelValue', inputValue)
+}
 
 
 let onSearch = e => {
@@ -20,16 +19,17 @@ let onSearch = e => {
 }
 
 let onClickButton = () => {
-    console.log(initValue.value)
+    // 向外传递标准事件
+    $emit('emited', { eventName: "search", detail: initValue.value })
 }
 
 let onClear = () => {
     console.log("清空搜索框")
 }
 
-let updateValue = inputValue => {
-    $emit('update:modelValue', inputValue)
-}
+
+onMounted(() => {
+})
 </script>
 
 <template>

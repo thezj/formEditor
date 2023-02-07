@@ -7,6 +7,7 @@ import { GridStack } from 'gridstack';
 import utils from './utils';
 
 
+
 // 序列化的组件库
 import componentLibrary from "./componentLibrary"
 // 序列化的组件数据
@@ -15,10 +16,13 @@ import componentList from "./componentList"
 import pageDataList from "./pageDataList"
 
 // 添加ref
+let iutils = ref(utils)
 let icomponentList = ref(componentList)
 let icomponentLibrary = ref(componentLibrary)
 let ipageDataList = ref(pageDataList)
 let iData = ref({})
+let settingMode = ref("page")
+let currentSettingComponent = ref(null)
 // 页面数据的类型
 let pageDataTypes = ref([{
   value: 'Boolean',
@@ -50,10 +54,10 @@ let initCanvas = () => {
     // Accept widgets dragged from other grids or from outside 
     acceptWidgets: true,
     // 单元高度
-    cellHeight: 80,
+    cellHeight: 4,
     // 单元格间隔大小
-    margin: 10,
-    //栅格大小
+    margin: 4,
+    // 栅格大小
     column: 12,
     // 禁止整体宽度小于minW时column变成1
     disableOneColumnMode: true
@@ -68,7 +72,6 @@ let initCanvas = () => {
     // 排除已经具备id的元素
     let isExist = layoutInfo.id
     if (!isExist) {
-
       grid.removeWidget(layoutInfo.el);
       // 添加组件到现有组件列表
       let currentCom = icomponentLibrary.value.getComponentByType(currentDraggedComponent)
@@ -117,16 +120,54 @@ let initCanvas = () => {
 let removeComponent = gsid => {
   let removeDom = document.querySelector(`[gs-id=${gsid}]`)
   grid.removeWidget(removeDom);
+
+  // 如果当前正在设置component,则显示pageData
+  if (settingMode.value == "com") {
+    if (currentSettingComponent.value.layout['gs-id'] == gsid) {
+      settingMode.value = "page"
+      currentSettingComponent.value = null
+    }
+  }
+}
+
+/**
+ * 组件设置
+ */
+let settingComponent = com => {
+  settingMode.value = "com"
+  currentSettingComponent.value = com
+}
+
+/**
+ * 组件 map layout
+ */
+let serializeComponentList = () => {
+  let itemsLayout = grid.getGridItems().map(x => x.gridstackNode)
+  itemsLayout.forEach(layout => {
+    let item = icomponentList.value.find(x => x.layout['gs-id'] == layout.id)
+    item.layout['gs-x'] = layout.x
+    item.layout['gs-y'] = layout.y
+    item.layout['gs-h'] = layout.h
+    item.layout['gs-w'] = layout.w
+  })
+}
+
+/**
+ * 处理组件发出的事件
+ */
+let catchComponentEvent = (component, ievent) => {
+  let componentEventHanler = component.schema.handlers[ievent.eventName]
+  if (componentEventHanler && pageFunction[componentEventHanler]) {
+    pageFunction[componentEventHanler](ievent)
+  }
 }
 
 /**
  * 应用页面数据
  */
 let applyPageData = () => {
-
   console.log("最新的pageDataList====", ipageDataList)
   dynamicDefinePageData(ipageDataList.value)
-
 }
 
 /**
@@ -183,9 +224,7 @@ let addPageData = () => {
   )
 }
 
-
-
-eval(`pageFunction.test = ()=>{console.log(iData.value.test = 111)}`)
+eval(`pageFunction.tttss = e =>{console.log(e,iData)}`)
 
 onMounted(async () => {
   dynamicDefinePageData(pageDataList)
@@ -196,7 +235,7 @@ onMounted(async () => {
 
 <template>
   <div class="componentLibrary">
-    <template v-for="component in icomponentLibrary.list" :key="component.id">
+    <template v-for="(component, index) in icomponentLibrary.list" :key="index">
       <div class="grid-stack-item" v-bind="component.layout" :data-ComType="component.schema.type">
         <div class="grid-stack-item-content library">
           <ion-icon :name="component.schema.icon"></ion-icon>
@@ -211,16 +250,23 @@ onMounted(async () => {
       <template v-for="component in icomponentList" :key="component.layout['gs-id']">
         <div class="grid-stack-item" v-bind="component.layout">
           <div class="grid-stack-item-content">
-            <div class="ui-setting-Btn" style="right:-1px"><ion-icon name="settings-outline"></ion-icon></div>
+            <div @click="settingComponent(component)" class="ui-setting-Btn" style="right:-1px">
+              <ion-icon name="settings-outline"></ion-icon>
+            </div>
             <div @click="removeComponent(component.layout['gs-id'])" class="ui-setting-Btn" style="right:19px">
               <ion-icon name="trash-outline"></ion-icon>
             </div>
+
+            <!-- 如果没有绑定页面data则取消v-model -->
             <template v-if="component.schema.props.iModel !== undefined">
               <component :is="component.schema.type" :iprops="component.schema.props"
-                v-model="iData[component.schema.props.iModel]"></component>
+                v-model="iData[component.schema.props.iModel]" @emited="catchComponentEvent(component, $event)">
+              </component>
             </template>
             <template v-else>
-              <component :is="component.schema.type" :iprops="component.schema.props"></component>
+              <component :is="component.schema.type" :iprops="component.schema.props"
+                @emited="catchComponentEvent(component, $event)">
+              </component>
             </template>
 
           </div>
@@ -230,17 +276,16 @@ onMounted(async () => {
     <div class="pageConfig">
       {{ iData }}<br />
       {{ ipageDataList }}<br />
-      {{ pageDataList }}<br />
     </div>
     <!-- 浮动按钮 -->
-    <div class="floatButton">
+    <div class="floatButton" @click="settingMode = 'page'">
       <ion-icon name="newspaper-outline"></ion-icon>
       <span>页面Data</span>
     </div>
   </div>
   <div class="attributeBoard">
     <!-- 页面设置 -->
-    <div class="pageSetting">
+    <div v-if="settingMode == 'page'" class="pageSetting">
       <div class="title">页面Data设置</div>
 
       <template v-for="(pageData, index) in ipageDataList" :key="index">
@@ -262,6 +307,7 @@ onMounted(async () => {
             <a-input v-model:value="pageData.default" />
           </template>
 
+          <!-- 布尔类型的配置 -->
           <template v-if="pageData.type == 'Boolean'">
             <div class="label">初始值：</div>
             <van-switch v-model="pageData.default" active-color="green" inactive-color="#dcdee0" style="zoom:0.8" />
@@ -270,7 +316,43 @@ onMounted(async () => {
       </template>
 
       <van-button icon="plus" type="primary" @click="addPageData" class="button">添加新属性</van-button>
-      <van-button icon="down" type="primary" @click="applyPageData" class="button">应用到当前页面</van-button>
+      <van-button icon="back-top" type="primary" @click="applyPageData" class="button">应用到当前页面</van-button>
+    </div>
+
+    <!-- 组件设置 -->
+    <div v-if="settingMode == 'com'" class="pageSetting">
+      <div class="title">component设置</div>
+
+      <template v-if="currentSettingComponent.schema.type == 'ivanCheckbox'">
+        <div class="pageDataItem">
+          <div class="label">Label：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.label" />
+        </div>
+        <div class="pageDataItem">
+          <div class="label">v-Model：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.iModel" />
+        </div>
+      </template>
+
+      <template v-if="currentSettingComponent.schema.type == 'ivanSearch'">
+        <div class="pageDataItem">
+          <div class="label">Label：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.label" />
+        </div>
+        <div class="pageDataItem">
+          <div class="label">v-Model：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.iModel" />
+        </div>
+        <div class="pageDataItem">
+          <div class="label">placeholder：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.placeholder" />
+        </div>
+        <div class="pageDataItem">
+          <div class="label">actionButtonTxt：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.actionButtonTxt" />
+        </div>
+      </template>
+
     </div>
   </div>
 </template>

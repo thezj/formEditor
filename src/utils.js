@@ -11,5 +11,8 @@ export default {
     },
     JSONCopy(obj){
         return JSON.parse(JSON.stringify(obj))
+    },
+    log(...arg){
+        console.log(...arg)
     }
 };
