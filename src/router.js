@@ -1,9 +1,15 @@
 import { createWebHistory, createRouter } from "vue-router";
-import render from "@/App.vue";
+import canvas from "@/App.vue";
+import render from "@/Render.vue";
 
 const routes = [
     {
         path: "/",
+        name: "canvas",
+        component: canvas,
+    },
+    {
+        path: "/render",
         name: "render",
         component: render,
     }
