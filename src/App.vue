@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, nextTick } from "vue"
+import { ref, onMounted } from "vue"
 
 // 布局插件
 import 'gridstack/dist/gridstack.min.css';
@@ -10,16 +10,12 @@ import utils from './utils';
 
 // 序列化的组件库
 import componentLibrary from "./componentLibrary"
-// 序列化的组件数据
-import componentList from "./componentList"
-// 页面的data数据
-import pageDataList from "./pageDataList"
 
 // 添加ref
 let iutils = ref(utils)
-let icomponentList = ref(componentList)
 let icomponentLibrary = ref(componentLibrary)
-let ipageDataList = ref(pageDataList)
+let icomponentList = ref([])
+let ipageDataList = ref([])
 let ipageFunctionList = ref([])
 let iData = ref({})
 let settingMode = ref("pageData")
@@ -251,8 +247,6 @@ let openCodeWithMonaco = ifunction => {
   currentSettingFunction.value = ifunction
   // 打开monaco容器
   codeEditorContainer.value = true
-
-
 }
 
 /**
@@ -303,9 +297,8 @@ let deletePageFunction = ifunction => {
 }
 
 
-
 onMounted(async () => {
-  dynamicDefinePageData(pageDataList)
+  dynamicDefinePageData(ipageDataList.value)
   initCanvas()
 })
 
