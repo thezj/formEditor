@@ -9,21 +9,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vant/touch-emulator": "^1.4.0",
-    "ant-design-vue": "^3.2.15",
-    "default-passive-events": "^2.0.0",
-    "gridstack": "^7.2.2",
-    "jsoneditor": "^9.9.2",
-    "less": "^4.1.3",
-    "monaco-editor": "0.32.0",
-    "unplugin-vue-components": "^0.22.12",
-    "vant": "^4.0.7",
-    "vite-plugin-monaco-editor": "^1.1.0",
-    "vue": "^3.2.45",
-    "vue-router": "^4.1.6"
+    "@ant-design/icons-vue": "^6.1.0",
+    "@vant/touch-emulator": "1.4.0",
+    "ant-design-vue": "3.2.15",
+    "default-passive-events": "2.0.0",
+    "gridstack": "7.2.2",
+    "less": "4.1.3",
+    "monaco-editor": "^0.34.1",
+    "unplugin-vue-components": "0.22.12",
+    "vant": "4.0.7",
+    "vue": "3.2.45",
+    "vue-router": "4.1.6"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.0.0",
-    "vite": "^4.0.0"
+    "@vitejs/plugin-vue": "4.0.0",
+    "vite": "4.0.0"
   }
 }

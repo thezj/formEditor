@@ -1,17 +1,11 @@
 import { createWebHistory, createRouter } from "vue-router";
 import render from "@/App.vue";
-import editor from "@/editor.vue";
 
 const routes = [
     {
         path: "/",
         name: "render",
         component: render,
-    },
-    {
-        path: "/editor",
-        name: "editor",
-        component: editor,
     }
 ];
 

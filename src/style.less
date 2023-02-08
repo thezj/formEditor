@@ -85,12 +85,23 @@ video {
 
 ::-webkit-scrollbar {
   width: 5px;
-  background-color: #aaa;
+  background-color: rgb(216, 216, 216);
+}
+
+textarea::-webkit-scrollbar {
+  width: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #000;
+  background: #3b3c3d;
 }
+
+.monacoDrawer {
+  .ant-drawer-body {
+    padding: 0 !important;
+  }
+}
+
 
 /* HTML5 display-role reset for older browsers */
 article,
@@ -159,6 +170,7 @@ table {
     .title {
       color: white;
       background: #3b3c3d;
+      border-bottom: 1px solid #232323;
       font-size: 14px;
       padding: 10px;
       margin-bottom: 10px;
@@ -179,7 +191,13 @@ table {
       font-size: 12px;
 
       .label {
-        color: gainsboro;
+        color: #d5eaff;
+        padding-top: 6px;
+      }
+
+      .describe {
+        color: #86fcff;
+        font-style: oblique;
         padding-bottom: 5px;
       }
 
@@ -240,12 +258,11 @@ table {
 
   .floatButton {
     left: 30px;
-    top: 5px;
+    top: 10px;
     color: white;
     background: #1989fa;
     position: absolute;
     border-radius: 2px;
-    border: 1px solid #1f72c6;
     box-shadow: inset 1px 1px 1px 0px #68a6e3;
     height: 19px;
     padding-left: 5px;
@@ -281,7 +298,7 @@ table {
     overflow-x: visible !important;
     border: 1px solid #1989fa;
     background: aliceblue;
-    
+
     cursor: all-scroll;
 
 

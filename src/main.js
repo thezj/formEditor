@@ -5,6 +5,7 @@ script.type = 'text/javascript';
 script.src = 'https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js';
 document.head.appendChild(script);
 
+
 /**
  * 初始化vue
  */
@@ -31,6 +32,8 @@ ccApp.component('ivanSearch', ivanSearch)
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
 ccApp.use(Antd)
+import { CodeOutlined } from '@ant-design/icons-vue';
+ccApp.component('CodeOutlined', CodeOutlined)
 
 //启动app
 ccApp.mount('#app')
