@@ -345,9 +345,15 @@ onMounted(async () => {
       </template>
     </div>
     <div class="pageConfig">
-      {{ iData }}<br />
-      {{ ipageDataList }}<br />
-      {{ ipageFunctionList }}<br />
+      -----------页面Data-----------
+      <pre>{{ iData }}</pre>
+      <pre>{{ ipageDataList }}</pre>
+
+      -----------页面function-----------
+      <pre>{{ ipageFunctionList }}</pre>
+
+      -----------页面Component-----------
+      <pre>{{ icomponentList }}</pre>
     </div>
     <!-- 浮动按钮 -->
     <div class="floatButton" @click="settingMode = 'pageData'">
@@ -399,6 +405,46 @@ onMounted(async () => {
     <div v-if="settingMode == 'com'" class="pageSetting">
       <div class="title">component设置</div>
 
+      <template v-if="currentSettingComponent.schema.type == 'ivanButton'">
+        <div class="pageDataItem">
+          <div class="label">Label：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.label" />
+          <div class="label">Type：</div>
+          <a-select ref="select" v-model:value="currentSettingComponent.schema.props.type" style="width: 120px"
+            :options="[{
+              value: 'primary',
+              label: 'primary',
+            }, {
+              value: 'success',
+              label: 'success',
+            }, {
+              value: 'warning',
+              label: 'warning',
+            }, {
+              value: 'danger',
+              label: 'danger',
+            }]"></a-select>
+          <div class="label">Size：</div>
+          <a-select ref="select" v-model:value="currentSettingComponent.schema.props.size" style="width: 120px"
+            :options="[{
+              value: 'mini',
+              label: 'mini',
+            }, {
+              value: 'small',
+              label: 'small',
+            }, {
+              value: 'large ',
+              label: 'large ',
+            }]"></a-select>
+        </div>
+
+        <div class="title">event设置 (component,ievent)=> void</div>
+        <div class="pageDataItem">
+          <div class="label">点击按钮时触发页面方法：</div>
+          <a-input placeholder="还未绑定页面处理方法" v-model:value="currentSettingComponent.schema.handlers.click" />
+        </div>
+      </template>
+
       <template v-if="currentSettingComponent.schema.type == 'ivanCheckbox'">
         <div class="pageDataItem">
           <div class="label">Label：</div>
@@ -427,20 +473,13 @@ onMounted(async () => {
           <div class="label">actionButtonTxt：</div>
           <a-input v-model:value="currentSettingComponent.schema.props.actionButtonTxt" />
         </div>
+
+        <div class="title">event设置 (component,ievent)=> void</div>
+        <div class="pageDataItem">
+          <div class="label">确定搜索时触发页面方法：</div>
+          <a-input placeholder="还未绑定页面处理方法" v-model:value="currentSettingComponent.schema.handlers.search" />
+        </div>
       </template>
-
-      <template v-if="currentSettingComponent.schema.handlers">
-        <div class="title">event设置</div>
-
-        <template v-if="currentSettingComponent.schema.type == 'ivanSearch'">
-          <div class="pageDataItem">
-            <div class="label">确定搜索时触发页面方法：</div>
-            <div class="describe">(component,ievent)=> void</div>
-            <a-input placeholder="还未绑定页面处理方法" v-model:value="currentSettingComponent.schema.handlers.search" />
-          </div>
-        </template>
-      </template>
-
     </div>
 
     <!-- 页面方法设置 -->

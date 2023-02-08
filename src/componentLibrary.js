@@ -22,7 +22,7 @@ export default {
              */
             layout: {
                 ['gs-h']: 8,
-                ['gs-w']: 2
+                ['gs-w']: 1
             },
             schema: {
                 type: 'ivanCheckbox',
@@ -50,6 +50,25 @@ export default {
                 },
                 handlers: {
                     search: ""
+                }
+            }
+        },
+        {
+            layout: {
+                ['gs-h']: 11,
+                ['gs-w']: 1
+            },
+            schema: {
+                type: 'ivanButton',
+                describe: "Button 按钮",
+                icon: 'tablet-landscape-outline',
+                props: {
+                    type:"primary",
+                    size:"small",
+                    label: "按钮",
+                },
+                handlers: {
+                    click: ""
                 }
             }
         },

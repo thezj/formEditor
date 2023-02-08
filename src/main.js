@@ -27,6 +27,8 @@ import ivanCheckbox from './ivanCheckbox.vue'
 ccApp.component('ivanCheckbox', ivanCheckbox)
 import ivanSearch from './ivanSearch.vue'
 ccApp.component('ivanSearch', ivanSearch)
+import ivanButton from './ivanButton.vue'
+ccApp.component('ivanButton', ivanButton)
 
 // ant design for vue
 import Antd from "ant-design-vue";
