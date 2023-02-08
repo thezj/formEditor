@@ -22,14 +22,6 @@ let settingMode = ref("pageData")
 let currentSettingComponent = ref(null)
 let codeEditorContainer = ref(false)
 let currentSettingFunction = ref(null)
-// 页面数据的类型
-let pageDataTypes = ref([{
-  value: 'Boolean',
-  label: 'Boolean',
-}, {
-  value: 'String',
-  label: 'String',
-}])
 
 
 /**
@@ -380,8 +372,13 @@ onMounted(async () => {
           <div class="label">属性名称：</div>
           <a-input v-model:value="pageData.name" />
           <div class="label">属性类型：</div>
-          <a-select ref="select" v-model:value="pageData.type" style="width: 120px" :options="pageDataTypes"
-            @change="pageDataTypeChanged(pageData)"></a-select>
+          <a-select ref="select" v-model:value="pageData.type" style="width: 120px" :options="[{
+            value: 'Boolean',
+            label: 'Boolean',
+          }, {
+            value: 'String',
+            label: 'String',
+          }]" @change="pageDataTypeChanged(pageData)"></a-select>
 
           <!-- 字符串类型的配置 -->
           <template v-if="pageData.type == 'String'">
