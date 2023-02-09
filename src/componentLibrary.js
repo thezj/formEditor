@@ -44,6 +44,7 @@ export default {
                 describe: "Search 搜索",
                 icon: 'search-circle-outline',
                 props: {
+                    iModel: '',
                     label: "搜索",
                     placeholder: "请输入关键词",
                     actionButtonTxt: "查找",
@@ -63,12 +64,32 @@ export default {
                 describe: "Button 按钮",
                 icon: 'tablet-landscape-outline',
                 props: {
-                    type:"primary",
-                    size:"small",
+                    type: "primary",
+                    size: "small",
                     label: "按钮",
                 },
                 handlers: {
                     click: ""
+                }
+            }
+        },
+        {
+            layout: {
+                ['gs-h']: 10,
+                ['gs-w']: 2
+            },
+            schema: {
+                type: 'ivanStepper',
+                describe: "Stepper 步进器",
+                icon: 'add-circle-outline',
+                props: {
+                    iModel: '',
+                    theme: "round",
+                    min: 1,
+                    max: 1,
+                },
+                handlers: {
+                    change: ""
                 }
             }
         },

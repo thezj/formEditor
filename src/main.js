@@ -31,6 +31,8 @@ import ivanSearch from './ivanSearch.vue'
 ccApp.component('ivanSearch', ivanSearch)
 import ivanButton from './ivanButton.vue'
 ccApp.component('ivanButton', ivanButton)
+import ivanStepper from './ivanStepper.vue'
+ccApp.component('ivanStepper', ivanStepper)
 
 
 // ant design for vue

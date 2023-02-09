@@ -202,6 +202,9 @@ let pageDataTypeChanged = pageData => {
   if (pageData.type == 'Boolean') {
     pageData.default = false
   }
+  if (pageData.type == 'Number') {
+    pageData.default = 1
+  }
 }
 
 /**
@@ -460,12 +463,21 @@ onMounted(async () => {
           }, {
             value: 'String',
             label: 'String',
+          }, {
+            value: 'Number',
+            label: 'Number',
           }]" @change="pageDataTypeChanged(pageData)"></a-select>
 
           <!-- 字符串类型的配置 -->
           <template v-if="pageData.type == 'String'">
             <div class="label">初始值：</div>
             <a-input v-model:value="pageData.default" />
+          </template>
+
+          <!-- 字符串类型的配置 -->
+          <template v-if="pageData.type == 'Number'">
+            <div class="label">初始值：</div>
+            <a-input-number style="width:100%" v-model:value="pageData.default" />
           </template>
 
           <!-- 布尔类型的配置 -->
@@ -557,6 +569,38 @@ onMounted(async () => {
         <div class="pageDataItem">
           <div class="label">确定搜索时触发页面方法：</div>
           <a-input placeholder="还未绑定页面处理方法" v-model:value="currentSettingComponent.schema.handlers.search" />
+        </div>
+      </template>
+
+      <template v-if="currentSettingComponent.schema.type == 'ivanStepper'">
+        <div class="pageDataItem">
+          <div class="label">theme：</div>
+          <a-select ref="select" v-model:value="currentSettingComponent.schema.props.theme" style="width: 120px"
+            :options="[{
+              value: 'round',
+              label: 'round',
+            }, {
+              value: 'square',
+              label: 'square',
+            }]"></a-select>
+        </div>
+        <div class="pageDataItem">
+          <div class="label">v-Model：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.iModel" />
+        </div>
+        <div class="pageDataItem">
+          <div class="label">min：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.min" />
+        </div>
+        <div class="pageDataItem">
+          <div class="label">max：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.max" />
+        </div>
+
+        <div class="title">event设置 (component,ievent)=> void</div>
+        <div class="pageDataItem">
+          <div class="label">加减时触发页面方法：</div>
+          <a-input placeholder="还未绑定页面处理方法" v-model:value="currentSettingComponent.schema.handlers.change" />
         </div>
       </template>
     </div>
