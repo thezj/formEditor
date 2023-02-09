@@ -141,6 +141,7 @@ let serializeComponentList = () => {
     item.layout['gs-h'] = layout.h
     item.layout['gs-w'] = layout.w
   })
+  return icomponentList
 }
 
 /**
@@ -288,6 +289,29 @@ let deletePageFunction = ifunction => {
   ipageFunctionList.value = ipageFunctionList.value.filter(x => x.name != ifunction)
 }
 
+/**
+ * 保存页面
+ */
+let savePage = async () => {
+
+  let pageConfig = {
+    ipageDataList: ipageDataList.value,
+    ipageFunctionList: ipageFunctionList.value,
+    icomponentList: serializeComponentList().value
+  }
+  let query = {
+    "db": "smartx-tpm",
+    "collection": "cfg-generic-page",
+    "document": pageConfig
+  }
+  let config = await utils.ihttp.post('http://192.168.1.147:1688/cfgGenericPageInsertOne', query)
+  if (config?.data?.insertedId) {
+    console.log("插入页面配置成功====", config?.data?.insertedId)
+  }
+
+
+}
+
 
 onMounted(async () => {
   dynamicDefinePageData(ipageDataList.value)
@@ -352,9 +376,15 @@ onMounted(async () => {
       <ion-icon name="newspaper-outline"></ion-icon>
       <span>页面Data</span>
     </div>
+
     <div class="floatButton" @click="settingMode = 'pageFunction'" style="left:115px">
       <ion-icon name="terminal-outline"></ion-icon>
       <span>页面Function</span>
+    </div>
+
+    <div class="floatButton" @click="savePage" style="left:220px">
+      <ion-icon name="save-outline"></ion-icon>
+      <span>保存页面</span>
     </div>
   </div>
   <div class="attributeBoard">

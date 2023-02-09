@@ -54,12 +54,23 @@ let dynamicDefinePageData = pageDataList => {
 /**
  * 拉取页面配置
  */
-let fetchPageConfig = () => {
-    console.log(route)
+let fetchPageConfig = async () => {
+    let routeQuery = route.query
+
+    let config = await utils.ihttp.post('http://192.168.1.147:1688/ieventConfigDev', {
+        "db": "smartx-tpm",
+        "collection": "cfg-generic-page",
+        "query": {
+            "_id": routeQuery.pageId
+        }
+    })
+
+    console.log(config.data)
+
 }
 
 watch(route, (newRoute, oldRoute) => {
-    console.log(newRoute, oldRoute)
+    fetchPageConfig()
 })
 
 onMounted(async () => {
@@ -67,6 +78,7 @@ onMounted(async () => {
     dynamicDefinePageData(ipageDataList.value)
 })
 
+// 暴露内部属性到template上的instance
 defineExpose({
     route,
     router
