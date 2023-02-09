@@ -186,6 +186,9 @@ let dynamicDefinePageData = pageDataList => {
       case "Boolean":
         eval(`iData.value.${item.name} = ${item.default}`)
         break;
+      default:
+        eval(`iData.value.${item.name} = ${item.default}`)
+        break;
     }
 
   })

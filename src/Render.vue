@@ -33,21 +33,24 @@ let catchComponentEvent = (component, ievent) => {
 /**
  * 动态添加page中绑定数据
  */
-let dynamicDefinePageData = pageDataList => {
+ let dynamicDefinePageData = pageDataList => {
 
-    iData.value = {}
+iData.value = {}
 
-    pageDataList.forEach(item => {
-        switch (item.type) {
-            case "String":
-                eval(`iData.value.${item.name} = "${item.default}"`)
-                break;
-            case "Boolean":
-                eval(`iData.value.${item.name} = ${item.default}`)
-                break;
-        }
+pageDataList.forEach(item => {
+  switch (item.type) {
+    case "String":
+      eval(`iData.value.${item.name} = "${item.default}"`)
+      break;
+    case "Boolean":
+      eval(`iData.value.${item.name} = ${item.default}`)
+      break;
+    default:
+      eval(`iData.value.${item.name} = ${item.default}`)
+      break;
+  }
 
-    })
+})
 }
 
 /**
