@@ -1,5 +1,7 @@
 import axios from 'axios';
+import { message } from 'ant-design-vue';
 export default {
+    message,
     ihttp: axios,
     getParentNode(currentNode, parentName) {
 

@@ -1,4 +1,5 @@
 <script setup>
+import { useRoute, useRouter } from 'vue-router'
 import { ref, onMounted } from "vue"
 
 // 布局插件
@@ -12,7 +13,6 @@ import utils from './utils';
 import componentLibrary from "./componentLibrary"
 
 // 添加ref
-let iutils = ref(utils)
 let icomponentLibrary = ref(componentLibrary)
 let icomponentList = ref([])
 let ipageDataList = ref([])
@@ -22,6 +22,9 @@ let settingMode = ref("pageData")
 let currentSettingComponent = ref(null)
 let codeEditorContainer = ref(false)
 let currentSettingFunction = ref(null)
+const route = useRoute();
+const router = useRouter();
+let ipageConfig
 
 
 /**
@@ -294,6 +297,8 @@ let deletePageFunction = ifunction => {
  */
 let savePage = async () => {
 
+  
+
   let pageConfig = {
     ipageDataList: ipageDataList.value,
     ipageFunctionList: ipageFunctionList.value,
@@ -306,16 +311,43 @@ let savePage = async () => {
   }
   let config = await utils.ihttp.post('http://192.168.1.147:1688/cfgGenericPageInsertOne', query)
   if (config?.data?.insertedId) {
+    utils.message.success('保存配置成功')
     console.log("插入页面配置成功====", config?.data?.insertedId)
   }
 
+}
+
+let fetchPageConfig = async () => {
+  let routeQuery = route.query
+
+  let config = await utils.ihttp.post('http://192.168.1.147:1688/ieventConfigDev', {
+    "db": "smartx-tpm",
+    "collection": "cfg-generic-page",
+    "query": {
+      "_id": routeQuery.pageId
+    }
+  })
+
+  console.log("加载页面配置====", config.data)
+  ipageConfig = config.data
+
+  // 初始化data
+  dynamicDefinePageData(config.data.ipageDataList)
+  ipageDataList.value = config.data.ipageDataList
+  // 初始化function
+  ipageFunctionList.value = config.data.ipageFunctionList
+  // 初始化组件
+  icomponentList.value = config.data.icomponentList
+
+  setTimeout(() => {
+    initCanvas()
+  }, 100);
 
 }
 
 
 onMounted(async () => {
-  dynamicDefinePageData(ipageDataList.value)
-  initCanvas()
+  fetchPageConfig()
 })
 
 </script>

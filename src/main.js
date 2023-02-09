@@ -30,6 +30,7 @@ ccApp.component('ivanSearch', ivanSearch)
 import ivanButton from './ivanButton.vue'
 ccApp.component('ivanButton', ivanButton)
 
+
 // ant design for vue
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";

@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import canvas from "@/App.vue";
 import render from "@/Render.vue";
+import nestPage from "@/nestPage.vue";
 
 const routes = [
     {
@@ -12,6 +13,11 @@ const routes = [
         path: "/render",
         name: "render",
         component: render,
+    },
+    {
+        path: "/nestPage",
+        name: "nestPage",
+        component: nestPage,
     }
 ];
 
