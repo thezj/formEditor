@@ -23,6 +23,8 @@ ccApp.use(router)
 import '@vant/touch-emulator';
 
 // 组件库引用
+import render from "@/Render.vue";
+ccApp.component('render', render)
 import ivanCheckbox from './ivanCheckbox.vue'
 ccApp.component('ivanCheckbox', ivanCheckbox)
 import ivanSearch from './ivanSearch.vue'

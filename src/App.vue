@@ -297,48 +297,68 @@ let deletePageFunction = ifunction => {
  */
 let savePage = async () => {
 
-  
+  if (ipageConfig) {
 
-  let pageConfig = {
-    ipageDataList: ipageDataList.value,
-    ipageFunctionList: ipageFunctionList.value,
-    icomponentList: serializeComponentList().value
-  }
-  let query = {
-    "db": "smartx-tpm",
-    "collection": "cfg-generic-page",
-    "document": pageConfig
-  }
-  let config = await utils.ihttp.post('http://192.168.1.147:1688/cfgGenericPageInsertOne', query)
-  if (config?.data?.insertedId) {
-    utils.message.success('保存配置成功')
-    console.log("插入页面配置成功====", config?.data?.insertedId)
-  }
+    let pageConfig = {
+      ipageDataList: ipageDataList.value,
+      ipageFunctionList: ipageFunctionList.value,
+      icomponentList: serializeComponentList().value
+    }
+    let query = {
+      "db": "smartx-tpm",
+      "collection": "cfg-generic-page",
+      "query": { _id: ipageConfig._id },
+      "document": pageConfig
+    }
+    let config = await utils.ihttp.post('http://192.168.1.147:1688/cfgGenericPageUpdate', query)
+    if (config?.data?.acknowledged) {
+      utils.message.success('保存配置成功')
+      console.log("保存页面配置成功====", config?.data)
+    }
 
+  } else {
+
+    let pageConfig = {
+      ipageDataList: ipageDataList.value,
+      ipageFunctionList: ipageFunctionList.value,
+      icomponentList: serializeComponentList().value
+    }
+    let query = {
+      "db": "smartx-tpm",
+      "collection": "cfg-generic-page",
+      "document": pageConfig
+    }
+    let config = await utils.ihttp.post('http://192.168.1.147:1688/cfgGenericPageInsertOne', query)
+    if (config?.data?.insertedId) {
+      utils.message.success('保存配置成功')
+      console.log("插入页面配置成功====", config?.data?.insertedId)
+    }
+
+  }
 }
 
 let fetchPageConfig = async () => {
   let routeQuery = route.query
 
-  let config = await utils.ihttp.post('http://192.168.1.147:1688/ieventConfigDev', {
-    "db": "smartx-tpm",
-    "collection": "cfg-generic-page",
-    "query": {
-      "_id": routeQuery.pageId
-    }
-  })
+  if (routeQuery.pageId) {
+    let config = await utils.ihttp.post('http://192.168.1.147:1688/ieventConfigDev', {
+      "db": "smartx-tpm",
+      "collection": "cfg-generic-page",
+      "query": {
+        "_id": routeQuery.pageId
+      }
+    })
+    console.log("加载页面配置====", config.data)
+    ipageConfig = config.data
 
-  console.log("加载页面配置====", config.data)
-  ipageConfig = config.data
-
-  // 初始化data
-  dynamicDefinePageData(config.data.ipageDataList)
-  ipageDataList.value = config.data.ipageDataList
-  // 初始化function
-  ipageFunctionList.value = config.data.ipageFunctionList
-  // 初始化组件
-  icomponentList.value = config.data.icomponentList
-
+    // 初始化data
+    dynamicDefinePageData(config.data.ipageDataList)
+    ipageDataList.value = config.data.ipageDataList
+    // 初始化function
+    ipageFunctionList.value = config.data.ipageFunctionList
+    // 初始化组件
+    icomponentList.value = config.data.icomponentList
+  }
   setTimeout(() => {
     initCanvas()
   }, 100);

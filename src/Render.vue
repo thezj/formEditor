@@ -1,8 +1,8 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import { ref, onMounted, onUpdated, watch } from "vue"
-
+import { ref, onMounted, watch } from "vue"
 import utils from './utils';
+const params = defineProps(["iprops"])
 
 // 添加ref
 const icomponentList = ref([])
@@ -66,18 +66,16 @@ let layoutArrange = () => {
     }
 }
 
-
 /**
  * 拉取页面配置
  */
 let fetchPageConfig = async () => {
-    let routeQuery = route.query
 
     let config = await utils.ihttp.post('http://192.168.1.147:1688/ieventConfigDev', {
         "db": "smartx-tpm",
         "collection": "cfg-generic-page",
         "query": {
-            "_id": routeQuery.pageId
+            "_id": params.iprops.pageId
         }
     })
 
@@ -91,7 +89,7 @@ let fetchPageConfig = async () => {
 
 }
 
-watch(route, (newRoute, oldRoute) => {
+watch(params, (newRoute, oldRoute) => {
     fetchPageConfig()
 })
 
@@ -114,7 +112,6 @@ defineExpose({
     <div class="renderPage">
         <!-- 根据组件列表渲染出格子 -->
         <template v-for="component in icomponentList" :key="component.layout['gs-id']">
-            {{ component.layout }}
             <div class="comContainer" :style="icomponentLayoutList[component.layout['gs-id']]">
                 <!-- 如果没有绑定页面data则取消v-model -->
                 <template v-if="component.schema.props.iModel !== undefined">

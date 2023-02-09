@@ -1,10 +1,9 @@
 <script setup>
-import render from "@/Render.vue";
+import { useRoute} from 'vue-router'
+const route = useRoute();
+
 </script>
 
 <template>
-    <div>
-        <render style="height:500px"></render>
-        <render></render>
-    </div>
+    <render :iprops="{ pageId: route.query.pageId }" style="height:500px;width:600px"></render>
 </template>
