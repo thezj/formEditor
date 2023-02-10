@@ -33,6 +33,10 @@ import ivanButton from './ivanButton.vue'
 ccApp.component('ivanButton', ivanButton)
 import ivanStepper from './ivanStepper.vue'
 ccApp.component('ivanStepper', ivanStepper)
+import iview from './iview.vue'
+ccApp.component('iview', iview)
+import iselect from './iselect.vue'
+ccApp.component('iselect', iselect)
 
 
 // ant design for vue

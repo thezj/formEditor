@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import { ref, onMounted } from "vue"
+import { ref, onMounted,toRaw } from "vue"
 
 // 布局插件
 import 'gridstack/dist/gridstack.min.css';
@@ -177,7 +177,6 @@ let applyPageData = () => {
 let dynamicDefinePageData = pageDataList => {
 
   iData.value = {}
-
   pageDataList.forEach(item => {
     switch (item.type) {
       case "String":
@@ -185,6 +184,9 @@ let dynamicDefinePageData = pageDataList => {
         break;
       case "Boolean":
         eval(`iData.value.${item.name} = ${item.default}`)
+        break;
+      case "Array":
+        eval(`iData.value.${item.name} = ${toRaw(item.default)}`)
         break;
       default:
         eval(`iData.value.${item.name} = ${item.default}`)
@@ -207,6 +209,9 @@ let pageDataTypeChanged = pageData => {
   }
   if (pageData.type == 'Number') {
     pageData.default = 1
+  }
+  if (pageData.type == 'Array') {
+    pageData.default = []
   }
 }
 
@@ -405,12 +410,12 @@ onMounted(async () => {
             <!-- 如果没有绑定页面data则取消v-model -->
             <template v-if="component.schema.props.iModel !== undefined">
               <component :is="component.schema.type" :iprops="component.schema.props"
-                v-model="iData[component.schema.props.iModel]" @emited="catchComponentEvent(component, $event)">
+                v-model="iData[component.schema.props.iModel]" @emited="catchComponentEvent(component, $event)" :idata="iData">
               </component>
             </template>
             <template v-else>
               <component :is="component.schema.type" :iprops="component.schema.props"
-                @emited="catchComponentEvent(component, $event)">
+                @emited="catchComponentEvent(component, $event)" :idata="iData">
               </component>
             </template>
 
@@ -469,6 +474,9 @@ onMounted(async () => {
           }, {
             value: 'Number',
             label: 'Number',
+          }, {
+            value: 'Array',
+            label: 'Array',
           }]" @change="pageDataTypeChanged(pageData)"></a-select>
 
           <!-- 字符串类型的配置 -->
@@ -481,6 +489,12 @@ onMounted(async () => {
           <template v-if="pageData.type == 'Number'">
             <div class="label">初始值：</div>
             <a-input-number style="width:100%" v-model:value="pageData.default" />
+          </template>
+
+          <!-- 字符串类型的配置 -->
+          <template v-if="pageData.type == 'Array'">
+            <div class="label">初始值：</div>
+            <input style="width:100%" :value="pageData.default" />
           </template>
 
           <!-- 布尔类型的配置 -->
@@ -604,6 +618,23 @@ onMounted(async () => {
         <div class="pageDataItem">
           <div class="label">加减时触发页面方法：</div>
           <a-input placeholder="还未绑定页面处理方法" v-model:value="currentSettingComponent.schema.handlers.change" />
+        </div>
+      </template>
+
+      <template v-if="currentSettingComponent.schema.type == 'iview'">
+        <div class="pageDataItem">
+          <div class="label">iText:</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.iText" />
+        </div>
+        <div class="pageDataItem">
+          <div class="label">inlineStyle：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.style" />
+        </div>
+
+        <div class="title">event设置 (component,ievent)=> void</div>
+        <div class="pageDataItem">
+          <div class="label">点击时触发页面方法：</div>
+          <a-input placeholder="还未绑定页面处理方法" v-model:value="currentSettingComponent.schema.handlers.click" />
         </div>
       </template>
     </div>
