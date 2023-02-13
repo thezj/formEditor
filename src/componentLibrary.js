@@ -123,7 +123,7 @@ export default {
                 props: {
                     iModel: '',
                     mode:"",
-                    style:"width: 140px",
+                    style:"width: 100%",
                     placeholder: "请选择，可搜索",
                     optionsKey:""
                 },
