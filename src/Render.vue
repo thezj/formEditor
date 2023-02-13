@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import { ref, onMounted, watch } from "vue"
+import { ref, onMounted, watch, toRaw } from "vue"
 import utils from './utils';
 const params = defineProps(["iprops"])
 
@@ -33,24 +33,26 @@ let catchComponentEvent = (component, ievent) => {
 /**
  * 动态添加page中绑定数据
  */
- let dynamicDefinePageData = pageDataList => {
+let dynamicDefinePageData = pageDataList => {
 
-iData.value = {}
+    iData.value = {}
+    pageDataList.forEach(item => {
+        switch (item.type) {
+            case "String":
+                eval(`iData.value.${item.name} = "${item.default}"`)
+                break;
+            case "Boolean":
+                eval(`iData.value.${item.name} = ${item.default}`)
+                break;
+            case "Array":
+                eval(`iData.value.${item.name} = ${toRaw(item.default)}`)
+                break;
+            default:
+                eval(`iData.value.${item.name} = ${item.default}`)
+                break;
+        }
 
-pageDataList.forEach(item => {
-  switch (item.type) {
-    case "String":
-      eval(`iData.value.${item.name} = "${item.default}"`)
-      break;
-    case "Boolean":
-      eval(`iData.value.${item.name} = ${item.default}`)
-      break;
-    default:
-      eval(`iData.value.${item.name} = ${item.default}`)
-      break;
-  }
-
-})
+    })
 }
 
 /**
@@ -119,12 +121,12 @@ defineExpose({
                 <!-- 如果没有绑定页面data则取消v-model -->
                 <template v-if="component.schema.props.iModel !== undefined">
                     <component :is="component.schema.type" :iprops="component.schema.props"
-                        v-model="iData[component.schema.props.iModel]" @emited="catchComponentEvent(component, $event)">
-                    </component>
+                        v-model="iData[component.schema.props.iModel]" @emited="catchComponentEvent(component, $event)"
+                        :idata="iData"></component>
                 </template>
                 <template v-else>
                     <component :is="component.schema.type" :iprops="component.schema.props"
-                        @emited="catchComponentEvent(component, $event)">
+                        @emited="catchComponentEvent(component, $event)" :idata="iData">
                     </component>
                 </template>
             </div>

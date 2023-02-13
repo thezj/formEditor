@@ -1,6 +1,5 @@
 <script setup>
-import { ref, onMounted, onUpdated, watch, computed, h, compile } from "vue"
-import * as Vue from "vue"
+import { ref, onMounted, onUpdated, watch, computed, h, compile, toRaw } from "vue"
 const params = defineProps(["iprops", "idata"])
 const $emit = defineEmits(["emited"])
 
@@ -10,29 +9,32 @@ let onclick = value => {
 }
 let idata = params.idata
 
+onUpdated(() => {
+    if (params.idata !== undefined) {
+        idata = params.idata
+    }
+})
 let renderInnerText = () => {
-
-    let _Vue = Vue
     let template = `${params.iprops.iText}`
-    let renderfunc = `${compile(template)}`
-    renderfunc = renderfunc.substring(50)
-    renderfunc = renderfunc.substring(0, renderfunc.length - 3)
+    // 匹配出本地变量的值
+    let expressions = [...template.matchAll(/{{[^{}]*}}/g)]
+    expressions.forEach(expMatched => {
+        let expString = expMatched[0]
+        let expValue
+        try {
+            expValue = eval(expString.substring(2, expString.length - 2))
+        } catch (error) {
+            expValue = ""
+        }
+        template = template.replace(expString, expValue)
+    })
 
-    let evalResult = eval(`(()=>{
-           return function render(_ctx, _cache) {
-                try {
-                    ${renderfunc}
-                } catch (error) {
-                    console.log(error)
-                    return null
-                }
-            }
-         })()`)
+    if (`${compile(template)}`.includes('_resolveComponent')) {
+        return h()
+    } else {
+        return h(compile(template))
+    }
 
-    console.log(renderfunc)
-
-
-    return h(evalResult)
 }
 
 onMounted(() => {
@@ -42,6 +44,6 @@ onMounted(() => {
 
 <template>
     <div v-bind="iprops" @click="onclick">
-        <renderInnerText></renderInnerText>
+        <renderInnerText :key="JSON.stringify(params.idata)"></renderInnerText>
     </div>
 </template>

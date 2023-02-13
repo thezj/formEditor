@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onUpdated, watch } from "vue"
-const params = defineProps(['modelValue', "iprops"])
+const params = defineProps(['modelValue', "iprops", "idata"])
 const $emit = defineEmits(['update:modelValue', "emited"])
 
 
@@ -15,12 +15,8 @@ onMounted(() => {
 </script>
 
 <template>
-    <a-select 
-    v-model:value="params.modelValue"
-    mode="multiple"
-    :style="params.iprops.style"
-    :placeholder="params.iprops.placeholder" 
-    :options="options1" 
-    @change="handleChange">
+    <a-select v-model:value="params.modelValue" :mode="params.iprops.mode" :style="params.iprops.style"
+        :placeholder="params.iprops.placeholder" :options="params.idata[params.iprops.optionsKey]"
+        @change="handleChange">
     </a-select>
 </template>

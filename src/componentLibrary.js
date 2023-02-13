@@ -29,7 +29,7 @@ export default {
                 describe: "view 显示块",
                 icon: 'tv-outline',
                 props: {
-                    iText:"boss:{{idata.bossName}}",
+                    iText: "",
                     style: "",
                 },
                 handlers: {
@@ -113,8 +113,8 @@ export default {
             }
         }, {
             layout: {
-                ['gs-h']: 10,
-                ['gs-w']: 2
+                ['gs-h']: 11,
+                ['gs-w']: 3
             },
             schema: {
                 type: 'iselect',
@@ -122,9 +122,10 @@ export default {
                 icon: 'menu-outline',
                 props: {
                     iModel: '',
-                    style: "",
+                    mode:"",
+                    style:"width: 140px",
                     placeholder: "请选择，可搜索",
-                    max: 1,
+                    optionsKey:""
                 },
                 handlers: {
                     change: ""

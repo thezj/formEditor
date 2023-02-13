@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import { ref, onMounted,toRaw } from "vue"
+import { ref, onMounted, toRaw } from "vue"
 
 // 布局插件
 import 'gridstack/dist/gridstack.min.css';
@@ -211,7 +211,7 @@ let pageDataTypeChanged = pageData => {
     pageData.default = 1
   }
   if (pageData.type == 'Array') {
-    pageData.default = []
+    pageData.default = '[]'
   }
 }
 
@@ -233,6 +233,18 @@ let addPageData = () => {
       default: "default Data",
     }
   )
+}
+
+/**
+ * 绑定数组值到页面数据
+ */
+let bindArrayToPageData = (idata, e) => {
+  try {
+    idata.default = eval(e.target.value)
+  } catch (error) {
+    idata.default = []
+  }
+
 }
 
 /**
@@ -410,7 +422,8 @@ onMounted(async () => {
             <!-- 如果没有绑定页面data则取消v-model -->
             <template v-if="component.schema.props.iModel !== undefined">
               <component :is="component.schema.type" :iprops="component.schema.props"
-                v-model="iData[component.schema.props.iModel]" @emited="catchComponentEvent(component, $event)" :idata="iData">
+                v-model="iData[component.schema.props.iModel]" @emited="catchComponentEvent(component, $event)"
+                :idata="iData">
               </component>
             </template>
             <template v-else>
@@ -491,10 +504,10 @@ onMounted(async () => {
             <a-input-number style="width:100%" v-model:value="pageData.default" />
           </template>
 
-          <!-- 字符串类型的配置 -->
+          <!-- 数组类型的配置 -->
           <template v-if="pageData.type == 'Array'">
             <div class="label">初始值：</div>
-            <input style="width:100%" :value="pageData.default" />
+            <a-input v-model:value="pageData.default" />
           </template>
 
           <!-- 布尔类型的配置 -->
@@ -580,6 +593,42 @@ onMounted(async () => {
         <div class="pageDataItem">
           <div class="label">actionButtonTxt：</div>
           <a-input v-model:value="currentSettingComponent.schema.props.actionButtonTxt" />
+        </div>
+
+        <div class="title">event设置 (component,ievent)=> void</div>
+        <div class="pageDataItem">
+          <div class="label">确定搜索时触发页面方法：</div>
+          <a-input placeholder="还未绑定页面处理方法" v-model:value="currentSettingComponent.schema.handlers.search" />
+        </div>
+      </template>
+
+      <template v-if="currentSettingComponent.schema.type == 'iselect'">
+        <div class="pageDataItem">
+          <div class="label">v-Model：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.iModel" />
+        </div>
+        <div class="pageDataItem">
+          <div class="label">placeholder：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.placeholder" />
+        </div>
+        <div class="pageDataItem">
+          <div class="label">mode：</div>
+          <a-select ref="select" v-model:value="currentSettingComponent.schema.props.mode" style="width: 120px"
+            :options="[{
+              value: 'multiple',
+              label: 'multiple',
+            }, {
+              value: '',
+              label: '',
+            }]"></a-select>
+        </div>
+        <div class="pageDataItem">
+          <div class="label">style：</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.style" />
+        </div>
+        <div class="pageDataItem">
+          <div class="label">optionsKey</div>
+          <a-input v-model:value="currentSettingComponent.schema.props.optionsKey" />
         </div>
 
         <div class="title">event设置 (component,ievent)=> void</div>
