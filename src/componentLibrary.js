@@ -21,16 +21,15 @@ export default {
     list: [
         {
             layout: {
-                ['gs-h']: 10,
-                ['gs-w']: 2
+                ['gs-h']: 30,
+                ['gs-w']: 3
             },
             schema: {
                 type: 'iview',
                 describe: "view 显示块",
                 icon: 'tv-outline',
                 props: {
-                    iText: "",
-                    style: "",
+                    iText: "ddd",
                 },
                 handlers: {
                     click: ""

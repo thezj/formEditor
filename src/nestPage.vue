@@ -1,10 +1,7 @@
 <script setup>
-import { ref } from 'vue';
-import { useRoute} from 'vue-router'
+import { ref, createApp, defineAsyncComponent } from 'vue';
+import { useRoute } from 'vue-router'
 const route = useRoute();
-
-let  a = ref(2)
-
 </script>
 
 <template>

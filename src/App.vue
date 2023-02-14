@@ -263,7 +263,15 @@ let addPageFunction = () => {
  * monaco编辑方法
  */
 let openCodeWithMonaco = ifunction => {
-  currentSettingFunction.value = ifunction
+
+  if (settingMode.value == 'pageFunction') {
+    currentSettingFunction.value = ifunction
+  }
+
+  if (settingMode.value == 'com') {
+    // currentSettingComponent.schema.props.iText
+  }
+
   // 打开monaco容器
   codeEditorContainer.value = true
 }
@@ -279,22 +287,48 @@ let initcodeEditor = () => {
 
     // 初始化monaco
     if (!monacoEditor && editorContainer) {
+      let initValue
+
+      if (settingMode.value == 'pageFunction') {
+        initValue = currentSettingFunction.value.code
+      }
+
+      if (settingMode.value == 'com') {
+        initValue = currentSettingComponent.value.schema.props.iText
+      }
+
+
       monacoEditor = monaco.editor.create(editorContainer, {
-        value: currentSettingFunction.value.code,
+        value: initValue,
         language: 'javascript',
         theme: 'vs-dark'
       });
 
+      // 编辑器内容改变直接同步到编辑的对象中
       monacoEditor.onDidChangeModelContent(changeEvent => {
         if (changeEvent.isFlush == false) {
-          currentSettingFunction.value.code = monacoEditor.getValue()
+          if (settingMode.value == 'pageFunction') {
+            currentSettingFunction.value.code = monacoEditor.getValue()
+          }
+          if (settingMode.value == 'com') {
+            currentSettingComponent.value.schema.props.iText = monacoEditor.getValue()
+          }
         }
       });
     }
 
     // 重置code
     if (monacoEditor && editorContainer) {
-      monacoEditor.setValue(currentSettingFunction.value.code)
+
+      if (settingMode.value == 'pageFunction') {
+        monacoEditor.setValue(currentSettingFunction.value.code)
+        monaco.editor.setModelLanguage(monacoEditor.getModel(), "javascript")
+      }
+
+      if (settingMode.value == 'com') {
+        monacoEditor.setValue(currentSettingComponent.value.schema.props.iText)
+        monaco.editor.setModelLanguage(monacoEditor.getModel(), "html")
+      }
     }
     setTimeout(() => {
       monacoEditor.trigger("editor", "editor.action.formatDocument");
@@ -360,6 +394,7 @@ let savePage = async () => {
   }
 }
 
+// 拉取已有配置进行编辑
 let fetchPageConfig = async () => {
   let routeQuery = route.query
 
@@ -418,7 +453,9 @@ onMounted(async () => {
             <div @click="removeComponent(component.layout['gs-id'])" class="ui-setting-Btn" style="right:19px">
               <ion-icon name="trash-outline"></ion-icon>
             </div>
-
+            <div class="ui-setting-Btn" style="right:39px">
+              <ion-icon name="move-outline"></ion-icon>
+            </div>
             <!-- 如果没有绑定页面data则取消v-model -->
             <template v-if="component.schema.props.iModel !== undefined">
               <component :is="component.schema.type" :iprops="component.schema.props"
@@ -672,14 +709,26 @@ onMounted(async () => {
 
       <template v-if="currentSettingComponent.schema.type == 'iview'">
         <div class="pageDataItem">
-          <div class="label">iText:</div>
-          <a-input v-model:value="currentSettingComponent.schema.props.iText" />
-        </div>
-        <div class="pageDataItem">
-          <div class="label">inlineStyle：</div>
-          <a-input v-model:value="currentSettingComponent.schema.props.style" />
-        </div>
+          <div class="label">
+            <span>代码：</span>
+            <a-button style="zoom:0.9;position: absolute;right: 11px;" size='small' @click="openCodeWithMonaco()">
+              <template #icon>
+                <CodeOutlined />
+              </template>
+              <span>
+                使用编辑器
+              </span>
+            </a-button>
+            <a-button style="zoom:0.9;position: absolute;right: 120px;" size='small' @click="openCodeWithMonaco()">
+              <span>
+                应用
+              </span>
+            </a-button>
+          </div>
+          <a-textarea style="height:120px" v-model:value="currentSettingComponent.schema.props.iText"
+            placeholder="内嵌vue组件模板" />
 
+        </div>
         <div class="title">event设置 (component,ievent)=> void</div>
         <div class="pageDataItem">
           <div class="label">点击时触发页面方法：</div>

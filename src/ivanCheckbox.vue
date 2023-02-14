@@ -21,5 +21,8 @@ onMounted(() => {
 </script>
 
 <template>
+
+
+      
       <van-checkbox v-model="initValue" @change="onchange">{{ iprops.label }}</van-checkbox>
 </template>
