@@ -29,7 +29,7 @@ export default {
                 describe: "view 显示块",
                 icon: 'tv-outline',
                 props: {
-                    iText: "ddd",
+                    iText: "<div></div>",
                 },
                 handlers: {
                     click: ""
@@ -121,10 +121,10 @@ export default {
                 icon: 'menu-outline',
                 props: {
                     iModel: '',
-                    mode:"",
-                    style:"width: 100%",
+                    mode: "",
+                    style: "width: 100%",
                     placeholder: "请选择，可搜索",
-                    optionsKey:""
+                    optionsKey: ""
                 },
                 handlers: {
                     change: ""

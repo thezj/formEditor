@@ -719,7 +719,8 @@ onMounted(async () => {
                 使用编辑器
               </span>
             </a-button>
-            <a-button style="zoom:0.9;position: absolute;right: 120px;" size='small' @click="openCodeWithMonaco()">
+            <a-button style="zoom:0.9;position: absolute;right: 120px;" size='small'
+              @click="currentSettingComponent.schema.props.refreshKey = Math.random()">
               <span>
                 应用
               </span>
