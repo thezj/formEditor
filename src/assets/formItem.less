@@ -1,0 +1,39 @@
+.form-item {
+    :deep(.van-field) {
+        flex-direction: column;
+        border-bottom: 1px solid #f5f5f5;
+        padding: unset;
+        margin-bottom: 0.1rem;
+
+        .van-field__label {
+            width: unset;
+            margin: unset;
+            font-size: 0.14rem;
+            font-weight: 500;
+            color: #13161b;
+        }
+
+        .van-field__value {
+            font-size: 0.14rem;
+            height: 0.35rem;
+            line-height: 0.35rem;
+            font-weight: 500;
+        }
+        .van-field__control::placeholder {
+            color: #c0c4cd;
+            -webkit-text-fill-color: #c0c4cd !important;
+        }
+    }
+    :deep(.van-field--error) {
+        .van-field__control::placeholder {
+            color: #c0c4cd;
+            -webkit-text-fill-color: #c0c4cd !important;
+        }
+    }
+
+    :deep(.van-field--disabled) {
+        .van-field__label {
+            color: #c0c4cd !important;
+        }
+    }
+}
