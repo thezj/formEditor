@@ -6,18 +6,7 @@ import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [,vue({
-    template: {
-      compilerOptions: {
-        //  屏蔽使用自定义 custom element告警提示
-        isCustomElement: tag => {
-          if (tag == 'ion-icon') {
-            return true
-          }
-        }
-      }
-    }
-  }), Components({
+  plugins: [vue(), Components({
     resolvers: [VantResolver()],
   })],
   resolve: {
@@ -25,5 +14,9 @@ export default defineConfig({
       "vue": "vue/dist/vue.esm-bundler.js",
       '@': resolve(__dirname, './src')
     }
+  },
+  // 定义src中使用的全局变量
+  define: {
   }
+
 })
